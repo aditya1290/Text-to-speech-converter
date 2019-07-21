@@ -1,0 +1,36 @@
+import pyaudio
+import speech_recognition as sr
+import pyttsx3
+import PyPDF2
+
+r = sr.Recognizer()
+mic = sr.Microphone()
+
+def speak(message):
+    engine = pyttsx3.init()
+    rate = engine.getProperty('rate')
+    engine.setProperty('rate',rate-20)
+    engine.say(message)
+    engine.runAndWait()
+
+#getting the Input file
+file_name = input("file name : ")
+x = input("path : ")
+
+temp1, temp2,extension = file_name.partition('.')
+
+if(extension=='txt'):
+    file1 = open(x)
+    speak(file1.read())
+    file1.close()
+elif extension=='pdf':
+    file1 = open(x,'rb')
+    reader = PyPDF2.PdfFileReader(file1)
+    page = reader.getPage(2)
+    pc = page.extractText()
+    print(pc)
+    speak(pc)
+    file1.close()
+else:
+    print("error : File format should be either text or pdf")
+    speak("error : file format should be either text or pdf")
